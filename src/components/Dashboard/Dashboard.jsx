@@ -8,6 +8,7 @@ const Dashboard = () => {
     const [logs, setLogs] = useState([]);
     const [goals, setGoals] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [period, setPeriod] = useState(7); // dafault period: last 7 days
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,22 +34,43 @@ const Dashboard = () => {
     if (!user) return null;
     if (loading) return <p>Loading dashboard...</p>;
 
+    // Calculate start date based on selected period
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - period);
+
+    // Filter logs for selected period
+    const selectedLogs = logs
+        .filter(log => new Date(log.date) >= startDate)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // show the most recent first
+
     return (
         <main>
             <h1>{user.username}'s Analytics</h1>
 
             <section>
-                <h2>Recent Daily Logs</h2>
-                {logs.length ? (
+                <label>
+                    Show logs from last{' '}
+                    <select value={period} onChange={evt => setPeriod(Number(evt.target.value))}>
+                        <option value={7}>7 Days</option>
+                        <option value={14}>14 Days</option>
+                        <option value={30}>30 Days</option>
+                    </select>
+                </label>
+            </section>
+
+            <section>
+                <h2>Daily Logs</h2>
+                {selectedLogs.length ? (
                     logs.map(log => (
                         <div key={log._id}>
                             <p>Date: {new Date(log.date).toLocaleDateString()}</p>
+                            <p>Mood: {log.mood}</p>
                             <p>Stress: {log.stressLevel}</p>
                             <p>Focus: {log.focusLevel}</p>
                         </div>
                     ))
                 ) : (
-                    <p>No logs yet.</p>
+                    <p>No logs in the selected period.</p>
                 )}
             </section>
 
