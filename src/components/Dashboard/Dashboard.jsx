@@ -3,6 +3,10 @@ import { UserContext } from '../../contexts/UserContext';
 import * as dailyLogService from '../../services/dailyLogService';
 import * as goalService from '../../services/goalService';
 
+// Import chart components
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+// import { RechartsDevtools } from '@recharts/devtools';
+
 const Dashboard = () => {
     const { user } = useContext(UserContext);
     const [logs, setLogs] = useState([]);
@@ -50,6 +54,14 @@ const Dashboard = () => {
     const focusAvg =
         selectedLogs.reduce((sum, log) => sum + log.focusLevel, 0) / (selectedLogs.length || 1);
 
+    // Chart data for selected logs    
+    const chartData = selectedLogs
+        .map(log => ({
+            date: new Date(log.date).toLocaleDateString(), // or just day number
+            Stress: log.stressLevel,
+            Focus: log.focusLevel,
+        }))
+        .reverse(); // chronological order
 
     return (
         <main>
@@ -65,6 +77,30 @@ const Dashboard = () => {
                         <option value={30}>30 Days</option>
                     </select>
                 </label>
+            </section>
+
+            {/* Show averages */}
+            <p>Average Stress: {stressAvg.toFixed(1)}</p>
+            <p>Average Focus: {focusAvg.toFixed(1)}</p>
+
+            {/* Show stress and focus chart */}
+            <section>
+                <h2>Stress & Focus Trends</h2>
+                {chartData.length ? (
+                    <ResponsiveContainer width="100%" height={300}>
+                        <LineChart data={chartData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="date" />
+                            <YAxis domain={[0, 5]} /> {/* stress/focus between 0-5 */}
+                            <Tooltip />
+                            <Legend />
+                            <Line type="monotone" dataKey="Stress" stroke="#FF4C4C" />
+                            <Line type="monotone" dataKey="Focus" stroke="#4C9AFF" />
+                        </LineChart>
+                    </ResponsiveContainer>
+                ) : (
+                    <p>No logs to display in chart.</p>
+                )}
             </section>
 
             <section>
