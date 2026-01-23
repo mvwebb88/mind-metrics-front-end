@@ -55,12 +55,9 @@ const App = () => {
         <Route path='/sign-up' element={<SignUpForm />} />
         <Route path="/sign-in" element={<SignInForm />} />
 
-
-        <Route path='/goals' element={<GoalList goals={goals} />} /> 
+        <Route path="/goals" element={<GoalList goals={goals} handleAddGoal={handleAddGoal} handleUpdateGoal={handleUpdateGoal} /> } />
         <Route path="/goals/:goalId" element={<GoalDetails handleDeleteGoal={handleDeleteGoal} />} />
-        <Route path="/goals/new" element={<GoalForm handleAddGoal={handleAddGoal} handleUpdateGoal={handleUpdateGoal} />} />
-        <Route path="/goals/:goalId/edit" element={<GoalForm handleAddGoal={handleAddGoal} handleUpdateGoal={handleUpdateGoal} />} />
-        
+        <Route path="/goals/:goalId/edit" element={ <GoalForm handleAddGoal={handleAddGoal} handleUpdateGoal={handleUpdateGoal} /> } />
       </Routes>
     </>
   );

@@ -6,7 +6,7 @@ const initialState = {
     title: "",
     description: "",
     targetMetric: "",
-    targetValue: 1,
+    targetValue: 0,
     startDate: "",
     endDate: "",
     status: "",
@@ -42,6 +42,10 @@ const GoalForm = (props) => {
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
+    } else {
+        props.handleAddGoal(payload);
+        setFormData(initialState); // limpia el form
+      
 
         const payload = {
             ...formData,
@@ -137,9 +141,9 @@ const GoalForm = (props) => {
                     value={formData.status}
                     onChange={handleChange}
                 >
-                    <option value="active">active</option>
-                    <option value="paused">paused</option>
-                    <option value="completed">completed</option>
+                    <option value="Active">Active</option>
+                    <option value="Paused">Paused</option>
+                    <option value="Completed">Completed</option>
                 </select>
 
                 <button type="submit">SUBMIT</button>
