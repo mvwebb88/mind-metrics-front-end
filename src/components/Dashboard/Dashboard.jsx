@@ -43,6 +43,14 @@ const Dashboard = () => {
         .filter(log => new Date(log.date) >= startDate)
         .sort((a, b) => new Date(b.date) - new Date(a.date)); // show the most recent first
 
+    // Compute averages
+    const stressAvg =
+        selectedLogs.reduce((sum, log) => sum + log.stressLevel, 0) / (selectedLogs.length || 1);
+
+    const focusAvg =
+        selectedLogs.reduce((sum, log) => sum + log.focusLevel, 0) / (selectedLogs.length || 1);
+
+
     return (
         <main>
             <h1>{user.username}'s Analytics</h1>
@@ -51,6 +59,7 @@ const Dashboard = () => {
                 <label>
                     Show logs from last{' '}
                     <select value={period} onChange={evt => setPeriod(Number(evt.target.value))}>
+                        <option value={3}>3 Days</option>
                         <option value={7}>7 Days</option>
                         <option value={14}>14 Days</option>
                         <option value={30}>30 Days</option>
