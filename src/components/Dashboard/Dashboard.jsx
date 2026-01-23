@@ -38,26 +38,50 @@ const Dashboard = () => {
     if (!user) return null;
     if (loading) return <p>Loading dashboard...</p>;
 
-    // Calculate start date based on selected period
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - period);
+    // Check if the input date is type Date or type String
+    // The type is set to Date in the schema, but this check is good for inputs via Postman
+    const checkDate = (value) => {
+        return value instanceof Date ? value : new Date(value);
+    };
+
+    // Format a date as MM/DD/YYYY in UTC    
+    const formatDate = (date) => {
+        const d = checkDate(date);
+        const month = String(d.getUTCMonth() + 1).padStart(2, '0'); // months are 0-based
+        const day = String(d.getUTCDate()).padStart(2, '0');
+        const year = d.getUTCFullYear();
+        return `${month}/${day}/${year}`;
+    };
+
+    // Get UTC start date for filtering logs by period
+    const getStartDateUTC = (period) => {
+        const today = new Date();
+        return new Date(Date.UTC(
+            today.getUTCFullYear(),
+            today.getUTCMonth(),
+            today.getUTCDate() - period + 1 // +1 includes today
+        ));
+    };
+
+    // Calculate start date in UTC
+    const startDate = getStartDateUTC(period);
 
     // Filter logs for selected period
     const selectedLogs = logs
-        .filter(log => new Date(log.date) >= startDate)
-        .sort((a, b) => new Date(b.date) - new Date(a.date)); // show the most recent first
+        .filter(log => {
+            const logDate = checkDate(log.date);
+            return logDate >= startDate;
+        })
+        .sort((a, b) => checkDate(b.date) - checkDate(a.date));
 
     // Compute averages
-    const stressAvg =
-        selectedLogs.reduce((sum, log) => sum + log.stressLevel, 0) / (selectedLogs.length || 1);
-
-    const focusAvg =
-        selectedLogs.reduce((sum, log) => sum + log.focusLevel, 0) / (selectedLogs.length || 1);
+    const stressAvg = selectedLogs.reduce((sum, log) => sum + log.stressLevel, 0) / (selectedLogs.length || 1);
+    const focusAvg = selectedLogs.reduce((sum, log) => sum + log.focusLevel, 0) / (selectedLogs.length || 1);
 
     // Chart data for selected logs    
     const chartData = selectedLogs
         .map(log => ({
-            date: new Date(log.date).toLocaleDateString(), // or just day number
+            date: formatDate(log.date),
             Stress: log.stressLevel,
             Focus: log.focusLevel,
         }))
@@ -67,6 +91,7 @@ const Dashboard = () => {
         <main>
             <h1>{user.username}'s Analytics</h1>
 
+            {/* Set period for analytics */}
             <section>
                 <label>
                     Show logs from last{' '}
@@ -83,7 +108,7 @@ const Dashboard = () => {
             <p>Average Stress: {stressAvg.toFixed(1)}</p>
             <p>Average Focus: {focusAvg.toFixed(1)}</p>
 
-            {/* Show stress and focus chart */}
+            {/* Show stress and focus chart to identify trends during selected period */}
             <section>
                 <h2>Stress & Focus Trends</h2>
                 {chartData.length ? (
@@ -103,12 +128,13 @@ const Dashboard = () => {
                 )}
             </section>
 
+            {/* Show selected daily logs */}
             <section>
                 <h2>Daily Logs</h2>
                 {selectedLogs.length ? (
-                    logs.map(log => (
+                    selectedLogs.map(log => (
                         <div key={log._id}>
-                            <p>Date: {new Date(log.date).toLocaleDateString()}</p>
+                            <p>Date: {formatDate(log.date)}</p>
                             <p>Mood: {log.mood}</p>
                             <p>Stress: {log.stressLevel}</p>
                             <p>Focus: {log.focusLevel}</p>
