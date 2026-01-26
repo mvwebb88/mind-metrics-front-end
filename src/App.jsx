@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, Navigate } from 'react-router';
+import { Routes, Route, useNavigate } from 'react-router';
 import { UserContext } from './contexts/UserContext';
 
 import NavBar from './components/NavBar/NavBar';
@@ -63,7 +63,7 @@ const App = () => {
         <Route path="/goals/:goalId/edit"element={<GoalForm handleAddGoal={handleAddGoal} handleUpdateGoal={handleUpdateGoal} />} />
 
 
-        <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/sign-in" />} />
+        <Route path="/dashboard" element={user ? <Dashboard /> : <SignInForm />} />
       </Routes>
     </>
   );
