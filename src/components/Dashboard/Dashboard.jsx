@@ -6,6 +6,41 @@ import * as goalService from '../../services/goalService';
 // Import chart components
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+// Store goal rules in an object
+// "gte" means "greater than or equal", and "lte" means "less than or equal"
+// const goalRules = {
+//     "Sleep Hours": { field: "sleepHours", comparison: "gte" },
+//     "Exercise Minutes": { field: "exerciseMin", comparison: "gte" },
+//     "Meditation Minutes": { field: "meditationMin", comparison: "gte" },
+//     "Water Cups": { field: "waterCups", comparison: "gte" },
+//     "Diet Score": { field: "dietScore", comparison: "gte" },
+//     "Hobby Minutes": { field: "hobbyMin", comparison: "gte" },
+//     "Work Hours": { field: "workHours", comparison: "lte" },
+//     "Screen Minutes": { field: "screenHours", comparison: "lte" },
+// };
+
+const goalRules = {
+    sleepHours: "gte",
+    exerciseMin: "gte",
+    meditationMin: "gte",
+    waterCups: "gte",
+    dietScore: "gte",
+    hobbyMin: "gte",
+    workHours: "lte",
+    screenHours: "lte",
+};
+
+const fieldLabels = {
+  sleepHours: "Sleep Hours",
+  exerciseMin: "Exercise Minutes",
+  meditationMin: "Meditation Minutes",
+  waterCups: "Water Cups",
+  dietScore: "Diet Score",
+  hobbyMin: "Hobby Minutes",
+  workHours: "Work Hours",
+  screenHours: "Screen Minutes",
+};
+
 const Dashboard = () => {
     const { user } = useContext(UserContext);
     const [logs, setLogs] = useState([]);
@@ -39,27 +74,75 @@ const Dashboard = () => {
 
     // Check if the input date is type Date or type String
     // The type is set to Date in the schema, but this check is good for inputs via Postman
-    const checkDate = (value) => {
-        return value instanceof Date ? value : new Date(value);
-    };
+    const checkDate = (value) => (value instanceof Date ? value : new Date(value));
 
     // Format a date as MM/DD/YYYY in UTC    
     const formatDate = (date) => {
-        const d = checkDate(date);
-        const month = String(d.getUTCMonth() + 1).padStart(2, '0'); // months are 0-based
-        const day = String(d.getUTCDate()).padStart(2, '0');
-        const year = d.getUTCFullYear();
+        const dt = checkDate(date);
+        const month = String(dt.getUTCMonth() + 1).padStart(2, '0'); // months are 0-based
+        const day = String(dt.getUTCDate()).padStart(2, '0');
+        const year = dt.getUTCFullYear();
         return `${month}/${day}/${year}`;
     };
 
-    // Calculate seleted logs taking in consideration the period selected by the user
+    // Calculate seleted logs for period
     const selectedLogs = [...logs]
         .sort((a, b) => checkDate(b.date) - checkDate(a.date))
         .slice(0, period);
 
-    // Compute averages
+    // Compute averages for stress and focus 
     const stressAvg = selectedLogs.reduce((sum, log) => sum + log.stressLevel, 0) / (selectedLogs.length || 1);
     const focusAvg = selectedLogs.reduce((sum, log) => sum + log.focusLevel, 0) / (selectedLogs.length || 1);
+
+    // Compute averages for all goal fields
+    const goalAvgs = {};
+
+    selectedLogs.forEach(log => {
+        Object.keys(goalRules).forEach(({ field }) => {
+            if (typeof log[field] === "number") {
+                if (!goalAvgs[field]) {
+                    goalAvgs[field] = { sum: 0, count: 0 };
+                }
+                goalAvgs[field].sum += log[field];
+                goalAvgs[field].count += 1;
+            }
+        });
+    });
+
+    Object.keys(goalAvgs).forEach(field => {
+        goalAvgs[field] = goalAvgs[field].count > 0 ? goalAvgs[field].sum / goalAvgs[field].count : null;
+    });
+
+    // Filter active goals that overlap with selected period
+    const periodStartDate = checkDate(selectedLogs[selectedLogs.length - 1]?.date);
+    const periodEndDate = checkDate(selectedLogs[0]?.date);
+
+    const activeGoals = goals.filter((goal) => {
+        if (goal.status !== "Active") return false;
+
+        const goalStart = checkDate(goal.startDate);
+        const goalEnd = checkDate(goal.endDate);
+
+        return goalStart <= periodEndDate && goalEnd >= periodStartDate;
+    });
+
+    // Evaluate goals
+    const evaluatedGoals = activeGoals
+        .map((goal) => {
+            const comparison = goalRules[goal.targetMetric];
+            if (!comparison) return null;
+
+            const value = goalAvgs[goal.targetMetric];
+
+            if (value === undefined || value === null) {
+                return { ...goal, value: null, met: null }; // Not enough data 
+            }
+
+            const met = comparison === "gte" ? value >= goal.targetValue : value <= goal.targetValue;
+
+            return { ...goal, value: Number(value.toFixed(1)), met };
+        })
+        .filter(Boolean);
 
     // Chart data for selected logs    
     const chartData = selectedLogs
@@ -131,12 +214,28 @@ const Dashboard = () => {
             {/* Show goals */}
             <section>
                 <h2>Your Goals</h2>
-                {goals.length ? (
-                    goals.map(goal => (
-                        <p key={goal._id}>{goal.title}</p>
+                {evaluatedGoals.length ? (
+                    evaluatedGoals.map(goal => (
+                        <div key={goal._id}>
+                            <p><strong>{goal.title}</strong></p>
+
+                            {goal.met === null ? (
+                                <span>⚪ Not enough data</span>
+                            ) : goal.met ? (
+                                <span>🟢 Met</span>
+                            ) : (
+                                <span>🔴 Not met</span>
+                            )}
+
+                            {goal.value !== null && (
+                                <p>
+                                    Avg: {goal.value} / Target: {goal.targetValue}
+                                </p>
+                            )}
+                        </div>
                     ))
                 ) : (
-                    <p>No goals yet.</p>
+                    <p>No active goals in this period.</p>
                 )}
             </section>
         </main>
