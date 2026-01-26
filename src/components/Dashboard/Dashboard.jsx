@@ -52,26 +52,10 @@ const Dashboard = () => {
         return `${month}/${day}/${year}`;
     };
 
-    // Get UTC start date for filtering logs by period
-    const getStartDateUTC = (period) => {
-        const today = new Date();
-        return new Date(Date.UTC(
-            today.getUTCFullYear(),
-            today.getUTCMonth(),
-            today.getUTCDate() - period + 1 // +1 includes today
-        ));
-    };
-
-    // Calculate start date in UTC
-    const startDate = getStartDateUTC(period);
-
-    // Filter logs for selected period
-    const selectedLogs = logs
-        .filter(log => {
-            const logDate = checkDate(log.date);
-            return logDate >= startDate;
-        })
-        .sort((a, b) => checkDate(b.date) - checkDate(a.date));
+    // Calculate seleted logs taking in consideration the period selected by the user
+    const selectedLogs = [...logs]
+        .sort((a, b) => checkDate(b.date) - checkDate(a.date))
+        .slice(0, period);
 
     // Compute averages
     const stressAvg = selectedLogs.reduce((sum, log) => sum + log.stressLevel, 0) / (selectedLogs.length || 1);
