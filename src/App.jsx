@@ -52,7 +52,6 @@ const App = () => {
     <>
       <NavBar />
       <Routes>
-        {/* <Route path='/' element={user ? <Dashboard /> : <Landing /> } /> */}
         <Route path='/' element={user ? <Home /> : <Landing /> } /> 
         <Route path='/sign-up' element={<SignUpForm />} />
         <Route path="/sign-in" element={<SignInForm />} />
@@ -63,7 +62,7 @@ const App = () => {
         <Route path="/goals/:goalId/edit"element={<GoalForm handleAddGoal={handleAddGoal} handleUpdateGoal={handleUpdateGoal} />} />
 
 
-        <Route path="/dashboard" element={user ? <Dashboard /> : <SignInForm />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </>
   );

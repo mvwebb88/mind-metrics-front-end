@@ -1,7 +1,7 @@
 const Home = () => {
     return (
         <main>
-            <h1>Hello!!!</h1>
+            <h1>Welcome to MindMetrics! </h1>
         </main>
     );
 };
