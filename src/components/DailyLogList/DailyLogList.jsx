@@ -3,8 +3,12 @@ import { Link } from "react-router";
 const DailyLogList = ({ dailyLogs }) => {
   return (
     <main>
+      <h1>Daily Logs</h1>
+
+      <Link to="/dailylogs/new">Add New Daily Log</Link>
+
       {dailyLogs.map((dailyLog) => (
-        <Link key={dailyLog._id} to={`/daily-logs/${dailyLog._id}`}>
+        <Link key={dailyLog._id} to={`/dailylogs/${dailyLog._id}`}>
           <article>
             <header>
               <h2>{dailyLog.mood}</h2>

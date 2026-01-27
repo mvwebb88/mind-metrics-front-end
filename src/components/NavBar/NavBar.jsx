@@ -28,6 +28,7 @@ const NavBar = () => {
                     <li><Link to='/'>Home</Link></li>
                     <li><Link to='dashboard/'>Dashboard</Link></li>
                     <li><Link to='/goals'>Goals</Link></li>
+                    <li><Link to='/dailylogs'>Daily Log History</Link></li>
                     <li><Link to='/' onClick={handleSignOut}>Sign Out</Link></li>
                 </ul>
             ) : (

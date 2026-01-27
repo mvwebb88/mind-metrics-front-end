@@ -3,6 +3,15 @@ import { useParams } from "react-router";
 
 import * as dailyLogService from "../../services/dailyLogService";
 
+// Converts backend Date to local YYYY-MM-DD for input type="date"
+const toLocalDateInput = (date) => {
+  const dt = new Date(date);
+  const year = dt.getFullYear();
+  const month = String(dt.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const day = String(dt.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 const MOODS = [
   "Happy",
   "Calm",
@@ -61,9 +70,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
       const dailyLogData = await dailyLogService.show(dailyLogId);
 
       // Convert Date -> YYYY-MM-DD for date input
-      const dateStr = dailyLogData?.date
-        ? new Date(dailyLogData.date).toISOString().slice(0, 10)
-        : "";
+      const dateStr = dailyLogData?.date ? toLocalDateInput(dailyLogData.date) : "";
 
       setFormData({
         ...dailyLogData,
@@ -118,7 +125,6 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log("formData", formData);
 
     // IMPORTANT: backend assigns userId from token; do not send userId from client
     const payload = { ...formData };

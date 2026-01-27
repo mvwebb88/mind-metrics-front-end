@@ -56,11 +56,27 @@ const deleteDailyLog = async (logId) => {
     }
 };
 
+// Update a daily log
+const updateDailyLog = async (logId, dailyLogFormData) => {
+    try {
+        const res = await fetch(`${BASE_URL}/${logId}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dailyLogFormData),
+        });
+        return res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 export {
     index,
     show,
     create,
     deleteDailyLog,
-
+    updateDailyLog,
 };
