@@ -6,19 +6,6 @@ import * as goalService from '../../services/goalService';
 // Import chart components
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-// Store goal rules in an object
-// "gte" means "greater than or equal", and "lte" means "less than or equal"
-// const goalRules = {
-//     "Sleep Hours": { field: "sleepHours", comparison: "gte" },
-//     "Exercise Minutes": { field: "exerciseMin", comparison: "gte" },
-//     "Meditation Minutes": { field: "meditationMin", comparison: "gte" },
-//     "Water Cups": { field: "waterCups", comparison: "gte" },
-//     "Diet Score": { field: "dietScore", comparison: "gte" },
-//     "Hobby Minutes": { field: "hobbyMin", comparison: "gte" },
-//     "Work Hours": { field: "workHours", comparison: "lte" },
-//     "Screen Minutes": { field: "screenHours", comparison: "lte" },
-// };
-
 const goalRules = {
     sleepHours: "gte",
     exerciseMin: "gte",
@@ -30,16 +17,16 @@ const goalRules = {
     screenHours: "lte",
 };
 
-const fieldLabels = {
-  sleepHours: "Sleep Hours",
-  exerciseMin: "Exercise Minutes",
-  meditationMin: "Meditation Minutes",
-  waterCups: "Water Cups",
-  dietScore: "Diet Score",
-  hobbyMin: "Hobby Minutes",
-  workHours: "Work Hours",
-  screenHours: "Screen Minutes",
-};
+// const fieldLabels = {
+//     sleepHours: "Sleep Hours",
+//     exerciseMin: "Exercise Minutes",
+//     meditationMin: "Meditation Minutes",
+//     waterCups: "Water Cups",
+//     dietScore: "Diet Score",
+//     hobbyMin: "Hobby Minutes",
+//     workHours: "Work Hours",
+//     screenHours: "Screen Minutes",
+// };
 
 const Dashboard = () => {
     const { user } = useContext(UserContext);
@@ -98,7 +85,7 @@ const Dashboard = () => {
     const goalAvgs = {};
 
     selectedLogs.forEach(log => {
-        Object.keys(goalRules).forEach(({ field }) => {
+        Object.keys(goalRules).forEach((field) => {
             if (typeof log[field] === "number") {
                 if (!goalAvgs[field]) {
                     goalAvgs[field] = { sum: 0, count: 0 };
@@ -114,8 +101,13 @@ const Dashboard = () => {
     });
 
     // Filter active goals that overlap with selected period
-    const periodStartDate = checkDate(selectedLogs[selectedLogs.length - 1]?.date);
-    const periodEndDate = checkDate(selectedLogs[0]?.date);
+
+    if (!selectedLogs.length) {
+        return <p>No logs in the selected period.</p>;
+    }
+
+    const periodStartDate = checkDate(selectedLogs[selectedLogs.length - 1].date);
+    const periodEndDate = checkDate(selectedLogs[0].date);
 
     const activeGoals = goals.filter((goal) => {
         if (goal.status !== "Active") return false;
@@ -220,11 +212,11 @@ const Dashboard = () => {
                             <p><strong>{goal.title}</strong></p>
 
                             {goal.met === null ? (
-                                <span>⚪ Not enough data</span>
+                                <span> Not enough data</span>
                             ) : goal.met ? (
-                                <span>🟢 Met</span>
+                                <span> Met</span>
                             ) : (
-                                <span>🔴 Not met</span>
+                                <span> Not met</span>
                             )}
 
                             {goal.value !== null && (

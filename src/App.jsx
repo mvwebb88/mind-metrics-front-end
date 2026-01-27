@@ -32,17 +32,18 @@ const App = () => {
     fetchGoals();
   }, [user]);
 
-//crear
+  //crear
   const handleAddGoal = async (goalFormData) => {
     const newGoal = await goalService.create(goalFormData);
     setGoals([newGoal, ...goals]);
   };
-  
+
   const handleDeleteGoal = async (goalId) => {
     await goalService.deleteGoal(goalId);
     setGoals(goals.filter((g) => g._id !== goalId));
   };
-//edit
+  
+  //edit
   const handleUpdateGoal = async (goalId, goalFormData) => {
     const updatedGoal = await goalService.updateGoal(goalId, goalFormData);
     setGoals(goals.map((g) => (g._id === goalId ? updatedGoal : g)));
@@ -52,17 +53,24 @@ const App = () => {
     <>
       <NavBar />
       <Routes>
-        <Route path='/' element={user ? <Home /> : <Landing /> } /> 
-        <Route path='/sign-up' element={<SignUpForm />} />
-        <Route path="/sign-in" element={<SignInForm />} />
+        <Route path='/' element={user ? <Home /> : <Landing />} />
+        {user ? (
+          <>
+            {/* Protected routes (available only to signed-in users) */}
+            <Route path="/goals" element={<GoalList goals={goals} />} />
+            <Route path="/goals/new" element={<GoalForm handleAddGoal={handleAddGoal} handleUpdateGoal={handleUpdateGoal} />} />
+            <Route path="/goals/:goalId" element={<GoalDetails handleDeleteGoal={handleDeleteGoal} />} />
+            <Route path="/goals/:goalId/edit" element={<GoalForm handleAddGoal={handleAddGoal} handleUpdateGoal={handleUpdateGoal} />} />
 
-        <Route path="/goals" element={<GoalList goals={goals} />} />
-        <Route path="/goals/new"element={<GoalForm handleAddGoal={handleAddGoal} handleUpdateGoal={handleUpdateGoal} />} />
-        <Route path="/goals/:goalId" element={<GoalDetails handleDeleteGoal={handleDeleteGoal} />} />
-        <Route path="/goals/:goalId/edit"element={<GoalForm handleAddGoal={handleAddGoal} handleUpdateGoal={handleUpdateGoal} />} />
-
-
-        <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </>
+        ) : (
+          <>
+            {/* Non-user routes (available only to guests) */}
+            <Route path='/sign-up' element={<SignUpForm />} />
+            <Route path="/sign-in" element={<SignInForm />} />
+          </>
+        )}
       </Routes>
     </>
   );
