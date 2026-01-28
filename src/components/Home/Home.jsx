@@ -2,40 +2,34 @@ import { useContext } from "react";
 import { Link } from "react-router";
 import { UserContext } from "../../contexts/UserContext";
 
-
 const Home = ({ dailyLogs }) => {
     const { user } = useContext(UserContext);
 
-    // Format a date for comparison (YYYY-MM-DD)
-    const formatYMD = (date) => {
-        const d = new Date(date);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, "0");
-        const day = String(d.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
+    // Compare two dates, ignoring hours/minutes/seconds
+    const isSameCalendarDay = (d1, d2) => {
+        const date1 = new Date(d1);
+        const date2 = new Date(d2);
+        return (
+            date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate()
+        );
     };
 
-    // Format a date for display (m/d/y)
+    // Format a date for display as m/d/y
     const formatMDY = (date) => {
-        const d = new Date(date);
-        const month = d.getMonth() + 1;
-        const day = d.getDate();
-        const year = d.getFullYear();
+        const dt = new Date(date);
+        const month = dt.getMonth() + 1;
+        const day = dt.getDate();
+        const year = dt.getFullYear();
         return `${month}/${day}/${year}`;
     };
 
-    const today = formatYMD(new Date());
-
-
+    // Find today's log for the current user
     const todayLog = dailyLogs?.find((log) => {
         if (!log.date || !user) return false;
-
         const logUserId = log.userId?._id || log.userId;
-        const logDateYMD = formatYMD(log.date);
-        console.log({ logDateYMD });
-        console.log({ today });
-
-        return String(logUserId) === String(user._id) && logDateYMD === today;
+        return String(logUserId) === String(user._id) && isSameCalendarDay(log.date, new Date());
     });
 
     return (
@@ -58,3 +52,4 @@ const Home = ({ dailyLogs }) => {
 };
 
 export default Home;
+
