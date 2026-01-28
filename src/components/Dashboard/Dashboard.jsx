@@ -111,13 +111,25 @@ const Dashboard = () => {
         return `${month}/${day}/${year}`;
     };
 
+    // Filter only the logged-in user's data
+    const userLogs = logs.filter(
+        (log) => String(log.userId?._id || log.userId) === String(user._id)
+    );
+    const userGoals = goals.filter(
+        (goal) => String(goal.userId?._id || goal.userId) === String(user._id)
+    );
+
+    if (!userLogs.length) {
+        return <p>No data available.</p>;
+    }
+
     // Calculate seleted logs for period
-    const selectedLogs = [...logs]
+    const selectedLogs = [...userLogs]
         .sort((a, b) => checkDate(b.date) - checkDate(a.date))
         .slice(0, period);
 
     if (!selectedLogs.length) {
-        return <p>No logs in the selected period.</p>;
+        return <p>No daily logs in the selected period.</p>;
     }
 
     // Compute stress and focus averages
@@ -160,7 +172,7 @@ const Dashboard = () => {
     const periodStartDate = checkDate(selectedLogs[selectedLogs.length - 1].date);
     const periodEndDate = checkDate(selectedLogs[0].date);
 
-    const activeGoals = goals.filter((goal) => {
+    const activeGoals = userGoals.filter((goal) => {
         if (goal.status !== "Active") return false;
 
         const goalStart = checkDate(goal.startDate);
