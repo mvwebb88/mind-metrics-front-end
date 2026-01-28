@@ -102,7 +102,7 @@ const DailyLogList = ({ dailyLogs }) => {
               <header>
                 <h2>{dailyLog.mood}</h2>
                 <p>
-                  Logged on {new Date(dailyLog.date).toLocaleDateString()}`
+                  Tracking Date: {new Date(dailyLog.date).toLocaleDateString()}`
                 </p>
               </header>
               <p>

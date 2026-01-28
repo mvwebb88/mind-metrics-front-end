@@ -16,8 +16,6 @@ const GoalList = ({ goals = [] }) => {
 
       <Link to="/goals/new">New Goal</Link>
 
-      <h2>Goal List</h2>
-
       {/* Filter */}
       <label htmlFor="status-filter">Filter by Status:</label>
       <select

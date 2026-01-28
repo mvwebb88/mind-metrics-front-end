@@ -42,16 +42,16 @@ const dietScoreOptions = [1, 2, 3, 4, 5];
 const initialState = {
   date: "",
   mood: "",
-  stressLevel: null,
-  focusLevel: null,
-  sleepHours: null,
-  exerciseMin: 0,
-  meditationMin: 0,
-  waterCups: null,
-  dietScore: null,
-  screenHours: null,
-  workHours: null,
-  hobbyMin: 0,
+  stressLevel: "",
+  focusLevel: "",
+  sleepHours: "",
+  exerciseMin: "",
+  meditationMin: "",
+  waterCups: "",
+  dietScore: "",
+  screenHours: "",
+  workHours: "",
+  hobbyMin: "",
   location: "",
   weather: "",
   notes: "",
@@ -114,7 +114,19 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
     evt.preventDefault();
 
     // IMPORTANT: backend assigns userId from token; do not send userId from client
-    const payload = { ...formData };
+    const payload = {
+      ...formData,
+      stressLevel: formData.stressLevel === "" ? undefined : Number(formData.stressLevel),
+      focusLevel: formData.focusLevel === "" ? undefined : Number(formData.focusLevel),
+      sleepHours: formData.sleepHours === "" ? undefined : Number(formData.sleepHours),
+      exerciseMin: formData.exerciseMin === "" ? undefined : Number(formData.exerciseMin),
+      meditationMin: formData.meditationMin === "" ? undefined : Number(formData.meditationMin),
+      waterCups: formData.waterCups === "" ? undefined : Number(formData.waterCups),
+      dietScore: formData.dietScore === "" ? undefined : Number(formData.dietScore),
+      screenHours: formData.screenHours === "" ? undefined : Number(formData.screenHours),
+      workHours: formData.workHours === "" ? undefined : Number(formData.workHours),
+      hobbyMin: formData.hobbyMin === "" ? undefined : Number(formData.hobbyMin),
+    };
     delete payload.userId;
 
     if (dailyLogId) {
@@ -162,7 +174,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="stressLevel"
           id="stressLevel-input"
-          value={formData.stressLevel ?? ""}
+          value={formData.stressLevel}
           onChange={handleChange}
         >
           <option value="" disabled>
@@ -180,7 +192,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="focusLevel"
           id="focusLevel-input"
-          value={formData.focusLevel ?? ""}
+          value={formData.focusLevel}
           onChange={handleChange}
         >
           <option value="" disabled>
@@ -198,7 +210,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="sleepHours"
           id="sleepHours-input"
-          value={formData.sleepHours ?? ""}
+          value={formData.sleepHours}
           onChange={handleChange}
         >
           <option value="" disabled>
@@ -217,7 +229,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           type="number"
           name="exerciseMin"
           id="exerciseMin-input"
-          value={formData.exerciseMin === 0 ? "" : formData.exerciseMin}
+          value={formData.exerciseMin}
           min={0}
           onChange={handleChange}
         />
@@ -228,7 +240,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           type="number"
           name="meditationMin"
           id="meditationMin-input"
-          value={formData.meditationMin === 0 ? "" : formData.meditationMin}
+          value={formData.meditationMin}
           min={0}
           onChange={handleChange}
         />
@@ -238,7 +250,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="waterCups"
           id="waterCups-input"
-          value={formData.waterCups ?? ""}
+          value={formData.waterCups}
           onChange={handleChange}
         >
           <option value="" disabled>
@@ -256,7 +268,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="dietScore"
           id="dietScore-input"
-          value={formData.dietScore ?? ""}
+          value={formData.dietScore}
           onChange={handleChange}
         >
           <option value="" disabled>
@@ -274,7 +286,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="screenHours"
           id="screenHours-input"
-          value={formData.screenHours ?? ""}
+          value={formData.screenHours}
           onChange={handleChange}
         >
           <option value="" disabled>
@@ -292,7 +304,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="workHours"
           id="workHours-input"
-          value={formData.workHours ?? ""}
+          value={formData.workHours}
           onChange={handleChange}
         >
           <option value="" disabled>
@@ -311,7 +323,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           type="number"
           name="hobbyMin"
           id="hobbyMin-input"
-          value={formData.hobbyMin === 0 ? "" : formData.hobbyMin}
+          value={formData.hobbyMin}
           min={0}
           onChange={handleChange}
         />
