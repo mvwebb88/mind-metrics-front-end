@@ -3,6 +3,15 @@ import { useParams } from "react-router";
 
 import * as dailyLogService from "../../services/dailyLogService";
 
+// Converts backend Date to local YYYY-MM-DD for input type="date"
+const toLocalDateInput = (date) => {
+  const dt = new Date(date);
+  const year = dt.getFullYear();
+  const month = String(dt.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const day = String(dt.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 const MOODS = [
   "Happy",
   "Calm",
@@ -24,46 +33,44 @@ const makeRange = (start, end, step = 1) => {
   return nums;
 };
 
-const sleepHoursOptions = makeRange(0, 20, 1);
+const sleepHoursOptions = makeRange(0, 24, 1);
 const stressFocusOptions = [1, 2, 3, 4, 5];
-const waterCupsOptions = makeRange(0, 20, 1);
+const waterCupsOptions = makeRange(0, 22, 1);
 const screenWorkOptions = makeRange(0, 24, 1);
 const dietScoreOptions = [1, 2, 3, 4, 5];
 
-// Your schema enumerates minutes in steps of 5 up to 240 (exercise/hobby) and up to 120 (meditation).
-const exerciseAndHobbyOptions = makeRange(0, 240, 5);
-const meditationOptions = makeRange(0, 120, 5);
+const initialState = {
+  date: "",
+  mood: "Happy",
+  stressLevel: 1,
+  focusLevel: 1,
+  sleepHours: 0,
+  exerciseMin: 0,
+  meditationMin: 0,
+  waterCups: 0,
+  dietScore: 1,
+  screenHours: 0,
+  workHours: 0,
+  hobbyMin: 0,
+  location: "",
+  weather: "",
+  notes: "",
+}
 
 const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
   const { dailyLogId } = useParams();
   console.log("dailyLogId:", dailyLogId);
 
-  const [formData, setFormData] = useState({
-    date: "",
-    mood: "Happy",
-    stressLevel: 1,
-    focusLevel: 1,
-    sleepHours: 0,
-    exerciseMin: 0,
-    meditationMin: 0,
-    waterCups: 0,
-    dietScore: 1,
-    screenHours: 0,
-    workHours: 0,
-    hobbyMin: 0,
-    location: "",
-    weather: "",
-    notes: "",
-  });
+  const [formData, setFormData] = useState(initialState);
 
   useEffect(() => {
+    if (!dailyLogId) return;
+
     const fetchDailyLog = async () => {
       const dailyLogData = await dailyLogService.show(dailyLogId);
 
-      // Convert Date -> YYYY-MM-DD for date input
-      const dateStr = dailyLogData?.date
-        ? new Date(dailyLogData.date).toISOString().slice(0, 10)
-        : "";
+      // Convert Date to YYYY-MM-DD for date input
+      const dateStr = dailyLogData?.date ? toLocalDateInput(dailyLogData.date) : "";
 
       setFormData({
         ...dailyLogData,
@@ -74,23 +81,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
     if (dailyLogId) fetchDailyLog();
 
     return () =>
-      setFormData({
-        date: "",
-        mood: "Happy",
-        stressLevel: 1,
-        focusLevel: 1,
-        sleepHours: 0,
-        exerciseMin: 0,
-        meditationMin: 0,
-        waterCups: 0,
-        dietScore: 1,
-        screenHours: 0,
-        workHours: 0,
-        hobbyMin: 0,
-        location: "",
-        weather: "",
-        notes: "",
-      });
+      setFormData(initialState);
   }, [dailyLogId]);
 
   const handleChange = (evt) => {
@@ -112,13 +103,15 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
 
     setFormData({
       ...formData,
-      [name]: numericFields.has(name) ? Number(value) : value,
+      [name]: numericFields.has(name)
+        ? (value === "" ? "" : Number(value)) // allow empty string temporarily
+        : value,
     });
+
   };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log("formData", formData);
 
     // IMPORTANT: backend assigns userId from token; do not send userId from client
     const payload = { ...formData };
@@ -207,34 +200,26 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
         </select>
 
         <label htmlFor="exerciseMin-input">Exercise Minutes</label>
-        <select
+        <input
           required
+          type="number"
           name="exerciseMin"
           id="exerciseMin-input"
           value={formData.exerciseMin}
+          min={0}
           onChange={handleChange}
-        >
-          {exerciseAndHobbyOptions.map((n) => (
-            <option key={n} value={n}>
-              {n}
-            </option>
-          ))}
-        </select>
+        />
 
         <label htmlFor="meditationMin-input">Meditation Minutes</label>
-        <select
+        <input
           required
+          type="number"
           name="meditationMin"
           id="meditationMin-input"
           value={formData.meditationMin}
+          min={0}
           onChange={handleChange}
-        >
-          {meditationOptions.map((n) => (
-            <option key={n} value={n}>
-              {n}
-            </option>
-          ))}
-        </select>
+        />
 
         <label htmlFor="waterCups-input">Water Cups</label>
         <select
@@ -297,19 +282,15 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
         </select>
 
         <label htmlFor="hobbyMin-input">Hobby Minutes</label>
-        <select
+        <input
           required
+          type="number"
           name="hobbyMin"
           id="hobbyMin-input"
           value={formData.hobbyMin}
+          min={0}
           onChange={handleChange}
-        >
-          {exerciseAndHobbyOptions.map((n) => (
-            <option key={n} value={n}>
-              {n}
-            </option>
-          ))}
-        </select>
+        />
 
         <label htmlFor="location-input">Location</label>
         <input

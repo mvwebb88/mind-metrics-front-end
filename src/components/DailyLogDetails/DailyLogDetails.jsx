@@ -26,7 +26,6 @@ const DailyLogDetails = ({ handleDeleteDailyLog }) => {
     <main>
       <section>
         <header>
-          <p>{dailyLog.mood.toUpperCase()}</p>
           <h1>Daily Log</h1>
           <p>
             {`${dailyLog.userId.username} logged on
@@ -35,13 +34,15 @@ const DailyLogDetails = ({ handleDeleteDailyLog }) => {
 
           {ownerId === user?._id && (
             <>
-              <Link to={`/daily-logs/${dailyLogId}/edit`}>Edit</Link>
+              <Link to={`/dailylogs/${dailyLogId}/edit`}>Edit</Link>
               <button onClick={() => handleDeleteDailyLog(dailyLogId)}>
                 Delete
               </button>
             </>
           )}
         </header>
+
+        <p>{dailyLog.mood.toUpperCase()}</p>
 
         <p>
           <strong>Stress Level:</strong> {dailyLog.stressLevel}
@@ -85,7 +86,7 @@ const DailyLogDetails = ({ handleDeleteDailyLog }) => {
       </section>
 
       <section>
-        <Link to="/daily-logs">← Back to Daily Logs</Link>
+        <Link to="/dailylogs">← Back to Daily Logs</Link>
       </section>
     </main>
   );
