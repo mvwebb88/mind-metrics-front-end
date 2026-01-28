@@ -120,7 +120,7 @@ const Dashboard = () => {
     );
 
     if (!userLogs.length) {
-        return <p>No data available.</p>;
+        return <p>No dashboard data available yet. Start by adding a daily log!</p>;
     }
 
     // Calculate seleted logs for period
