@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const GoalList = ({ goals = [] }) => {
 
-    const [statusFilter, setStatusFilter] = useState("ALL");
+  const [statusFilter, setStatusFilter] = useState("ALL");
 
   const filteredGoals =
     statusFilter === "ALL"

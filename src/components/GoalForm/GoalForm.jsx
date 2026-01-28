@@ -89,6 +89,7 @@ const GoalForm = (props) => {
                     value={formData.targetMetric}
                     onChange={handleChange}
                 >
+                    <option value="" disabled>Select option</option>
                     <option value="Sleep Hours">Sleep Hours</option>
                     <option value="Exercise Minutes">Exercise Minutes</option>
                     <option value="Meditation Minutes">Meditation Minutes</option>
@@ -105,7 +106,7 @@ const GoalForm = (props) => {
                     type="number"
                     name="targetValue"
                     id="targetValue-input"
-                    value={formData.targetValue}
+                    value={formData.targetValue === 0 ? "" : formData.targetValue}
                     onChange={handleChange}
                 />
 
@@ -137,7 +138,7 @@ const GoalForm = (props) => {
                     required
                 >
                     <option value="" disabled>
-                        Select status...
+                        Select option
                     </option>
                     <option value="Active">Active</option>
                     <option value="Paused">Paused</option>

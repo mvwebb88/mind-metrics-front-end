@@ -21,6 +21,7 @@ const DailyLogList = ({ dailyLogs }) => {
     );
   };
 
+  // Helper function that return true as soon as one log matches
   const hasTodaysLog = dailyLogs?.some(
     (log) =>
       String(log.userId?._id || log.userId) === String(user?._id) &&
@@ -54,7 +55,7 @@ const DailyLogList = ({ dailyLogs }) => {
     <main>
       <h1>Daily Logs</h1>
 
-      {/* Add today's log or show message to add previos logs, if any */}
+      {/* Add today's log or show message to add previous logs, if any */}
       {user && (
         <>
           {!hasTodaysLog ? (
@@ -91,7 +92,7 @@ const DailyLogList = ({ dailyLogs }) => {
         </label>
       </div>
 
-      {/* List logs */}
+      {/* List daily logs */}
       {filteredLogs.length === 0 ? (
         <p>No daily logs found for this period.</p>
       ) : (

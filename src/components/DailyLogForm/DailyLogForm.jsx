@@ -41,16 +41,16 @@ const dietScoreOptions = [1, 2, 3, 4, 5];
 
 const initialState = {
   date: "",
-  mood: "Happy",
-  stressLevel: 1,
-  focusLevel: 1,
-  sleepHours: 0,
+  mood: "",
+  stressLevel: null,
+  focusLevel: null,
+  sleepHours: null,
   exerciseMin: 0,
   meditationMin: 0,
-  waterCups: 0,
-  dietScore: 1,
-  screenHours: 0,
-  workHours: 0,
+  waterCups: null,
+  dietScore: null,
+  screenHours: null,
+  workHours: null,
   hobbyMin: 0,
   location: "",
   weather: "",
@@ -147,6 +147,9 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           value={formData.mood}
           onChange={handleChange}
         >
+          <option value="" disabled>
+            Select option
+          </option>
           {MOODS.map((m) => (
             <option key={m} value={m}>
               {m}
@@ -159,9 +162,12 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="stressLevel"
           id="stressLevel-input"
-          value={formData.stressLevel}
+          value={formData.stressLevel ?? ""}
           onChange={handleChange}
         >
+          <option value="" disabled>
+            Select option
+          </option>
           {stressFocusOptions.map((n) => (
             <option key={n} value={n}>
               {n}
@@ -174,9 +180,12 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="focusLevel"
           id="focusLevel-input"
-          value={formData.focusLevel}
+          value={formData.focusLevel ?? ""}
           onChange={handleChange}
         >
+          <option value="" disabled>
+            Select option
+          </option>
           {stressFocusOptions.map((n) => (
             <option key={n} value={n}>
               {n}
@@ -189,9 +198,12 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="sleepHours"
           id="sleepHours-input"
-          value={formData.sleepHours}
+          value={formData.sleepHours ?? ""}
           onChange={handleChange}
         >
+          <option value="" disabled>
+            Select option
+          </option>
           {sleepHoursOptions.map((n) => (
             <option key={n} value={n}>
               {n}
@@ -205,7 +217,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           type="number"
           name="exerciseMin"
           id="exerciseMin-input"
-          value={formData.exerciseMin}
+          value={formData.exerciseMin === 0 ? "" : formData.exerciseMin}
           min={0}
           onChange={handleChange}
         />
@@ -216,7 +228,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           type="number"
           name="meditationMin"
           id="meditationMin-input"
-          value={formData.meditationMin}
+          value={formData.meditationMin === 0 ? "" : formData.meditationMin}
           min={0}
           onChange={handleChange}
         />
@@ -226,9 +238,12 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="waterCups"
           id="waterCups-input"
-          value={formData.waterCups}
+          value={formData.waterCups ?? ""}
           onChange={handleChange}
         >
+          <option value="" disabled>
+            Select option
+          </option>
           {waterCupsOptions.map((n) => (
             <option key={n} value={n}>
               {n}
@@ -241,9 +256,12 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="dietScore"
           id="dietScore-input"
-          value={formData.dietScore}
+          value={formData.dietScore ?? ""}
           onChange={handleChange}
         >
+          <option value="" disabled>
+            Select option
+          </option>
           {dietScoreOptions.map((n) => (
             <option key={n} value={n}>
               {n}
@@ -256,9 +274,12 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="screenHours"
           id="screenHours-input"
-          value={formData.screenHours}
+          value={formData.screenHours ?? ""}
           onChange={handleChange}
         >
+          <option value="" disabled>
+            Select option
+          </option>
           {screenWorkOptions.map((n) => (
             <option key={n} value={n}>
               {n}
@@ -271,9 +292,12 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           required
           name="workHours"
           id="workHours-input"
-          value={formData.workHours}
+          value={formData.workHours ?? ""}
           onChange={handleChange}
         >
+          <option value="" disabled>
+            Select option
+          </option>
           {screenWorkOptions.map((n) => (
             <option key={n} value={n}>
               {n}
@@ -287,7 +311,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
           type="number"
           name="hobbyMin"
           id="hobbyMin-input"
-          value={formData.hobbyMin}
+          value={formData.hobbyMin === 0 ? "" : formData.hobbyMin}
           min={0}
           onChange={handleChange}
         />
