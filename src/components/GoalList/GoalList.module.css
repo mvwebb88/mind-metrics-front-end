@@ -1,0 +1,111 @@
+.page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .title {
+    margin: 0;
+  }
+  
+  .subtitle {
+    margin: 6px 0 0;
+    color: var(--muted);
+  }
+  
+  .buttonPrimary {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+  }
+  
+  .toolbar {
+    display: flex;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    margin: 16px 0;
+  }
+  
+  .filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .label {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  
+  .select {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: white;
+  }
+  
+  .sectionTitle {
+    margin: 18px 0 12px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  
+  @media (max-width: 720px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    background: var(--card);
+  }
+  
+  .cardTitle {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+  
+  .link {
+    color: var(--text);
+    text-decoration: none;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+  
+  .meta {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  
+  .empty {
+    color: var(--muted);
+  }
+  
