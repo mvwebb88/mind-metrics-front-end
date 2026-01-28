@@ -1,15 +1,17 @@
 import { Link } from "react-router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 
 const DailyLogList = ({ dailyLogs }) => {
-
   const { user } = useContext(UserContext);
 
-  const today = new Date();
+  // State for date filter
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  // Compare two dates ignoring time
-  const isSameCalendarDay = (d1, d2) => {
+  // Check if the current user has a log for today
+  const today = new Date();
+  const isSameDay = (d1, d2) => {
     const date1 = new Date(d1);
     const date2 = new Date(d2);
     return (
@@ -19,31 +21,49 @@ const DailyLogList = ({ dailyLogs }) => {
     );
   };
 
-  // Check if the current user has a daily log for today
   const hasTodaysLog = dailyLogs?.some(
-    (log) => String(log.userId?._id || log.userId) === String(user?._id) &&
-      isSameCalendarDay(log.date, today)
+    (log) =>
+      String(log.userId?._id || log.userId) === String(user?._id) &&
+      isSameDay(log.date, today)
   );
 
-  // Show the most recent logs by input date on top
+  // Sort logs by date (most recent first)
   const sortedLogs = [...dailyLogs].sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );
+
+  // Helper: convert date to YYYY-MM-DD string
+  const toYMD = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // Filter logs by start/end date (only if both are set)
+  const filteredLogs =
+    startDate && endDate
+      ? sortedLogs.filter((log) => {
+        const logYMD = toYMD(log.date);
+        return logYMD >= startDate && logYMD <= endDate;
+      })
+      : sortedLogs;
 
   return (
     <main>
       <h1>Daily Logs</h1>
 
+      {/* Add today's log or show message to add previos logs, if any */}
       {user && (
         <>
           {!hasTodaysLog ? (
-            // No log for today: allow adding today’s log
             <Link to="/dailylogs/new">Add Daily Log</Link>
           ) : (
-            // Already has log for today: allow adding daily logs and add message to user
             <div>
               <p>
-                You already have a log for today! If you missed logging any previous days, you can do it here:
+                You already have a log for today! If you missed logging any
+                previous days, you can do it here:
               </p>
               <Link to="/dailylogs/new?date=past">Add Daily Log</Link>
             </div>
@@ -51,30 +71,49 @@ const DailyLogList = ({ dailyLogs }) => {
         </>
       )}
 
-      {sortedLogs.map((dailyLog) => (
-        <Link key={dailyLog._id} to={`/dailylogs/${dailyLog._id}`}>
-          <article>
-            <header>
-              <h2>{dailyLog.mood}</h2>
+      {/* Date range filter */}
+      <div style={{ margin: "20px 0" }}>
+        <label>
+          Start Date:{" "}
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+        </label>
+        <label style={{ marginLeft: "10px" }}>
+          End Date:{" "}
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </label>
+      </div>
+
+      {/* List logs */}
+      {filteredLogs.length === 0 ? (
+        <p>No daily logs found for this period.</p>
+      ) : (
+        filteredLogs.map((dailyLog) => (
+          <Link key={dailyLog._id} to={`/dailylogs/${dailyLog._id}`}>
+            <article>
+              <header>
+                <h2>{dailyLog.mood}</h2>
+                <p>
+                  Logged on {new Date(dailyLog.date).toLocaleDateString()}`
+                </p>
+              </header>
               <p>
-                {`${dailyLog.userId.username} logged on
-                ${new Date(dailyLog.date).toLocaleDateString()}`}
+                Stress: {dailyLog.stressLevel} | Focus: {dailyLog.focusLevel}
               </p>
-            </header>
-            <p>
-              Stress: {dailyLog.stressLevel} | Focus: {dailyLog.focusLevel}
-            </p>
-          </article>
-        </Link>
-      ))}
+            </article>
+          </Link>
+        ))
+      )}
     </main>
   );
 };
 
 export default DailyLogList;
-
-
-
-
-
 
