@@ -37,10 +37,10 @@ const DailyLogList = ({ dailyLogs }) => {
       {user && (
         <>
           {!hasTodaysLog ? (
-            // No log for today → allow adding today’s log
+            // No log for today: allow adding today’s log
             <Link to="/dailylogs/new">Add Daily Log</Link>
           ) : (
-            // Already has log for today → allow adding for previous days
+            // Already has log for today: allow adding daily logs and add message to user
             <div>
               <p>
                 You already have a log for today! If you missed logging any previous days, you can do it here:
