@@ -44,7 +44,6 @@ const GoalList = ({ goals = [] }) => {
             </div>
           </section>
     
-          <h2 className={styles.sectionTitle}>Goal List</h2>
     
           {filteredGoals.length === 0 ? (
             <p className={styles.empty}>No goals found.</p>

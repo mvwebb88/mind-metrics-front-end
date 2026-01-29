@@ -2,6 +2,7 @@ import { useParams, Link, useNavigate } from "react-router";
 import { useState, useEffect, useContext } from "react";
 import * as goalService from "../../services/goalService";
 import { UserContext } from "../../contexts/UserContext";
+import styles from "./GoalDetails.module.css";
 
 const GoalDetails = (props) => {
     const { goalId } = useParams();
@@ -17,9 +18,9 @@ const GoalDetails = (props) => {
         fetchGoal();
     }, [goalId]);
 
-    if (!goal) return <main>Loading...</main>;
+    if (!goal) return <main className={styles.page}>Loading...</main>;
 
-    if (goal.err) return <main>{goal.err}</main>;
+    if (goal.err) return <main className={styles.page}>{goal.err}</main>;
 
     const isOwner = goal.userId === user._id;
 
@@ -28,30 +29,64 @@ const GoalDetails = (props) => {
         navigate("/goals");
     };
 
+    const badgeClass = () => {
+        if (goal.status === "Active")
+            return `${styles.badge} ${styles.badgeActive}`;
+        if (goal.status === "Paused")
+            return `${styles.badge} ${styles.badgePaused}`;
+        if (goal.status === "Completed")
+            return `${styles.badge} ${styles.badgeCompleted}`;
+        return styles.badge;
+    };
+
     return (
-        <main>
-            <section>
-                <header>
-                    <h1>{goal.title}</h1>
-                    <p><strong>Created on {new Date(goal.createdAt).toLocaleDateString()}</strong></p>
+        <main className={styles.page}>
+            <section className={styles.card}>
+                <header className={styles.header}>
+                    <div>
+                        <h1 className={styles.title}>{goal.title}</h1>
+                        <p className={styles.subtitle}>
+                            Created on{" "}
+                            {new Date(goal.createdAt).toLocaleDateString()}
+                        </p>
+                    </div>
 
-
+                    <span className={badgeClass()}>{goal.status}</span>
                 </header>
 
-                <p>{goal.description}</p>
+                <p className={styles.description}>{goal.description}</p>
 
-                <p><strong>Metric:</strong> {goal.targetMetric}</p>
-                <p><strong>Target:</strong> {goal.targetValue}</p>
-                <p><strong>Start:</strong> {new Date(goal.startDate).toLocaleDateString()}</p>
-                <p><strong>End:</strong> {new Date(goal.endDate).toLocaleDateString()}</p>
-                <p><strong>Status:</strong> {goal.status}</p>
+                <section className={styles.section}>
+                    <div className={styles.row}>
+                        <div className={styles.label}>Metric</div>
+                        <div className={styles.value}>{goal.targetMetric}</div>
+                    </div>
+
+                    <div className={styles.row}>
+                        <div className={styles.label}>Target</div>
+                        <div className={styles.value}>{goal.targetValue}</div>
+                    </div>
+                    <div className={styles.row}>
+                        <div className={styles.label}>Start</div>
+                        <div className={styles.value}>
+                            {new Date(goal.startDate).toLocaleDateString()}
+                        </div>
+                    </div>
+                    <div className={styles.row}>
+                        <div className={styles.label}>End</div>
+                        <div className={styles.value}>
+                            {new Date(goal.endDate).toLocaleDateString()}
+                        </div>
+                    </div>
+                </section>
+
                 {isOwner && (
-                    <>
-                        <Link to={`/goals/${goalId}/edit`}>EDIT</Link>
-                        <button onClick={handleDelete}>DELETE</button>
-                    </>
+                    <div className={styles.actions}>
+                    <Link className={styles.action} to={`/goals/${goalId}/edit`}>Edit</Link>
+                    <Link className={styles.action} type="button" onClick={handleDelete}>Delete</Link>
+                  </div>
+                  
                 )}
-
             </section>
         </main>
     );
