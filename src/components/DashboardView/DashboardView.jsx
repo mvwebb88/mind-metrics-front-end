@@ -11,11 +11,34 @@ const DashboardView = ({
     selectedLogs,
     evaluatedGoals,
     recommendations,
-    formatDate
+    formatDate,
+    weather,
+    latestLog,
+    weatherMessage
 }) => {
+
     return (
         <main>
             <h1>{user.username}'s Analytics</h1>
+
+            {/* Latest Log */}
+            <section>
+                <h2>Current Weather</h2>
+                {weather ? (
+                    <div>
+                        <p>Based on the location from your most recent daily log ({new Date(latestLog.date).toLocaleDateString()}) </p>
+                        <p>Location: {weather.location}</p>
+                        <p>Temperature: {weather.temp}°C</p>
+                        <p><img src={weather.icon} alt={weather.condition}></img> {weather.condition}</p>
+
+                        {weatherMessage && (
+                            <p><em>{weatherMessage}</em></p>
+                        )}
+                    </div>
+                ) : (
+                    <p>No weather data available.</p>
+                )}
+            </section>
 
             {/* Set period */}
             <section>
@@ -38,17 +61,19 @@ const DashboardView = ({
             <section>
                 <h2>Stress & Focus Trends</h2>
                 {chartData.length ? (
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis domain={[0, 5]} />
-                            <Tooltip />
-                            <Legend />
-                            <Line type="monotone" dataKey="Stress" stroke="#FF4C4C" />
-                            <Line type="monotone" dataKey="Focus" stroke="#4C9AFF" />
-                        </LineChart>
-                    </ResponsiveContainer>
+                    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <LineChart data={chartData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="date" />
+                                <YAxis domain={[0, 5]} />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="monotone" dataKey="Stress" stroke="#FF4C4C" />
+                                <Line type="monotone" dataKey="Focus" stroke="#4C9AFF" />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
                 ) : (
                     <p>No logs to display in chart.</p>
                 )}
