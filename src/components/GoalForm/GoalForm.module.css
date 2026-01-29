@@ -1,0 +1,119 @@
+/* src/components/GoalForm/GoalForm.module.css */
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  max-width: 560px;
+}
+
+.header {
+  margin-bottom: 14px;
+}
+
+.title {
+  margin: 0;
+  color: var(--text);
+}
+
+.subtitle {
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.input,
+.select,
+.textarea {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: white;
+  font: inherit;
+  color: var(--text);
+}
+
+.textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: 3px solid rgba(0, 160, 223, 0.25);
+  border-color: rgba(0, 160, 223, 0.5);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: white;
+
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+
+  cursor: pointer;
+
+  /* makes button consistent */
+  font: inherit;
+  line-height: 1;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.action:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 720px) {
+  .card {
+    max-width: 100%;
+  }
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
