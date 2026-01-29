@@ -12,7 +12,7 @@ const DashboardView = ({
     evaluatedGoals,
     recommendations,
     formatDate,
-    weather,// for weather API
+    weather,
     latestLog,
     weatherMessage
 }) => {
@@ -61,7 +61,7 @@ const DashboardView = ({
             <section>
                 <h2>Stress & Focus Trends</h2>
                 {chartData.length ? (
-                    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+                    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" />
