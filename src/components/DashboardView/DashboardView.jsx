@@ -11,11 +11,41 @@ const DashboardView = ({
     selectedLogs,
     evaluatedGoals,
     recommendations,
-    formatDate
+    formatDate,
+    latestLog,// for weather API
+    weather// for weather API
 }) => {
     return (
         <main>
             <h1>{user.username}'s Analytics</h1>
+
+            {/* Latest Log */}
+            <section>
+                <h2>Latest Daily Log</h2>
+                {latestLog ? (
+                    <div>
+                        <p>Date: {formatDate(latestLog.date)}</p>
+                        <p>Stress: {latestLog.stressLevel}</p>
+                        <p>Focus: {latestLog.focusLevel}</p>
+                        <p>Habits: {latestLog.habits || "No habit data"}</p>
+                    </div>
+                ) : (
+                    <p>No daily logs yet.</p>
+                )}
+            </section>
+
+            <section>
+                <h2>Current Weather</h2>
+                {weather ? (
+                    <div>
+                        <p>Location: {weather.location}</p>
+                        <p>Temperature: {weather.temp}°C</p>
+                        <p><img src={weather.icon}></img> {weather.condition}</p>
+                    </div>
+                ) : (
+                    <p>No weather data available.</p>
+                )}
+            </section>
 
             {/* Set period */}
             <section>

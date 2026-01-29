@@ -79,8 +79,14 @@ const Dashboard = () => {
     const [goals, setGoals] = useState([]);
     const [loading, setLoading] = useState(true);
     const [period, setPeriod] = useState(3); // dafault period: last 3 days
+    // State variables for weather API
+    const [latestLog, setLatestLog] = useState(null);
+    const [weather, setWeather] = useState(null);
 
     useEffect(() => {
+
+        if (!user) return;
+
         const fetchData = async () => {
             try {
                 // Use Promise.all to fetch multiple pieces of data at once
@@ -97,8 +103,29 @@ const Dashboard = () => {
             }
         };
 
-        if (user) fetchData();
+        // Weather API
+        const fetchLatest = async () => {
+            try {
+                const res = await fetch(`${import.meta.env.VITE_BACK_END_SERVER_URL}/dashboard/latest`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                const data = await res.json();
+                console.log({data})
+                setLatestLog(data.latestLog);
+                setWeather(data.weather);
+            } catch (err) {
+                console.error("Failed to fetch dashboard:", err);
+            }
+        };
+
+        fetchData();
+        fetchLatest();
+
     }, [user]);
+
+
 
     if (!user) return null;
     if (loading) return <p>Loading dashboard...</p>;
@@ -239,6 +266,8 @@ const Dashboard = () => {
             evaluatedGoals={evaluatedGoals}
             recommendations={recommendations}
             formatDate={formatDate}
+            latestLog={latestLog} // for weather API
+            weather={weather} // for weather API
         />
     );
 };
