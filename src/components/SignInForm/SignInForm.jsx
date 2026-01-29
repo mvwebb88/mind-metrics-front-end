@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { signIn } from '../../services/authService';
 
 import { UserContext } from '../../contexts/UserContext';
+import styles from "./SignInForm.module.css";
 
 const SignInForm = () => {
     const navigate = useNavigate();
@@ -36,41 +37,64 @@ const SignInForm = () => {
     };
 
     return (
-        <main>
-            <h1>Sign In</h1>
-            <p>{message}</p>
-            <form autoComplete='off' onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor='username'>Username:</label>
-                    <input
-                        type='text'
-                        autoComplete='off'
-                        id='username'
-                        value={formData.username}
-                        name='username'
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor='password'>Password:</label>
-                    <input
-                        type='password'
-                        autoComplete='off'
-                        id='password'
-                        value={formData.password}
-                        name='password'
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <button>Sign In</button>
-                    <button onClick={() => navigate('/')}>Cancel</button>
-                </div>
-            </form>
-        </main>
-    );
+       <main className={styles.page}>
+      <h1 className={styles.title}>Sign In</h1>
+
+      {!!message && (
+        <p className={styles.error}>{message}</p>
+      )}
+
+      <section className={styles.card}>
+        <form className={styles.form} autoComplete="off" onSubmit={handleSubmit}>
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor="username">
+              Username
+            </label>
+            <input
+              className={styles.control}
+              type="text"
+              autoComplete="off"
+              id="username"
+              value={formData.username}
+              name="username"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor="password">
+              Password
+            </label>
+            <input
+              className={styles.control}
+              type="password"
+              autoComplete="off"
+              id="password"
+              value={formData.password}
+              name="password"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className={styles.actions}>
+            <button className={styles.buttonPrimary} type="submit">
+              Sign In
+            </button>
+
+            <button
+              className={styles.buttonSecondary}
+              type="button"
+              onClick={() => navigate("/")}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+  );
 };
 
 export default SignInForm;
