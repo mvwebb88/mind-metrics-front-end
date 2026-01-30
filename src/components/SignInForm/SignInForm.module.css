@@ -76,8 +76,8 @@
   padding: 10px 14px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  background: white;
-  color: var(--text);
+  background: var(--primary);   /* changed */
+  color: white;                  /* changed */
   font-weight: 600;
   cursor: pointer;
 }
