@@ -137,8 +137,6 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
     if (dailyLogId) fetchDailyLog();
   }, [dailyLogId]);
 
-  // ✅ Needed because your JSX uses onChange={handleChange}
-  // (This matches your original functionality: update form state from inputs)
   const handleChange = (evt) => {
     const { name, value } = evt.target;
 
@@ -432,21 +430,6 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
               onChange={handleChange}
             />
           </div>
-
-          {/* <div className={styles.row}>
-            <label className={styles.label} htmlFor="weather-input">
-              Weather
-            </label>
-            <input
-              className={styles.control}
-              required
-              type="text"
-              name="weather"
-              id="weather-input"
-              value={formData.weather}
-              onChange={handleChange}
-            />
-          </div> */}
 
           <div className={styles.row}>
             <label className={styles.label} htmlFor="weather-input">

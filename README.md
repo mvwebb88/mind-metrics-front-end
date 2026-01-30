@@ -70,6 +70,7 @@ By combining habit tracking, goal-setting, and personalized insights, MindMetric
 * [MDN Documentation](https://developer.mozilla.org/en-US/)
 * [Recharts Documentation](https://recharts.github.io/)
 * [Weather API](https://www.weatherapi.com/)
+* [Freepik](https://www.freepik.es/)
 
 
 ## :arrow_right: Next Steps 
