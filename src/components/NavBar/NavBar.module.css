@@ -27,21 +27,24 @@
     justify-content: flex-end; /* ✅ */
     gap: 16px;
   }
-  
+
   
   
   .brand {
     position: absolute;
-    left: 12px;              /* ✅ pegado a la izquierda */
+    left: 12px;             
     top: 50%;
     transform: translateY(-50%);
-  
     display: inline-flex;
     align-items: center;
     gap: 10px;
     white-space: nowrap;
+    text-decoration: none; 
   }
   
+  .brand:hover {
+    text-decoration: none; 
+  }
   
   .logoDot {
     width: 12px;
@@ -131,7 +134,8 @@
       padding-bottom: 2px;
     }
   
-  
+    body { padding-top: 60px; }
+
     
     .menuRight {
       margin-left: 24px;
