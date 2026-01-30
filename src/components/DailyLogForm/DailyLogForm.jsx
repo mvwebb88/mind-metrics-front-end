@@ -412,7 +412,7 @@ const DailyLogForm = ({ handleAddDailyLog, handleUpdateDailyLog }) => {
 
         <div className={styles.actions}>
           <button className={styles.buttonPrimary} type="submit">
-            SUBMIT
+            Submit
           </button>
         </div>
       </form>

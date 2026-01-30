@@ -24,64 +24,67 @@ const NavBar = () => {
 
     return (
         <nav className={styles.container}>
-            <div className={styles.inner}>
-                <Link to="/" className={styles.brand}>
-                    <span className={styles.logoDot} />
-                    <span className={styles.brandText}>MindMetrics</span>
-                </Link>
-
-                {user ? (
-                    <ul className={styles.menu}>
-                        <li>
-                            <Link className={styles.link} to="/">
-                                Home
-                            </Link>
-                        </li>
-
-                        <li>
-                            <Link className={styles.link} to="/dailylogs">
-                                Daily Log
-                            </Link>
-                        </li>
-
-                        {/* Si tu dashboard es la home cuando estás logueada, usa "/" */}
-                        <li>
-                            <Link className={styles.link} to="/">
-                                Dashboard
-                            </Link>
-                        </li>
-
-                        <li>
-                            <Link className={styles.link} to="/goals">
-                                Goals
-                            </Link>
-                        </li>
-
-                        <li className={styles.pushRight}>
-                            <Link
-                                className={`${styles.btn} ${styles.btnSmall}`}
-                                to="/"
-                                onClick={handleSignOut}> 
-                                Sign Out
-                            </Link>
-                        </li>
-                    </ul>
-                ) : (
-                    <ul className={styles.menu}>
-                        <li>
-                            <Link className={styles.link} to="/sign-in">
-                                Sign In
-                            </Link>
-                        </li>
-                        <li>
-                            <Link className={styles.btn} to="/sign-up">
-                                Sign Up
-                            </Link>
-                        </li>
-                    </ul>
-                )}
+          <div className={styles.inner}>
+            {/* Logo  */}
+            <div className={styles.brand}>
+              <span className={styles.logoDot} />
+              <span className={styles.brandText}>MindMetrics</span>
             </div>
+    
+            {user ? (
+              <ul className={styles.menu}>
+                <li>
+                  <Link className={styles.link} to="/">
+                    Home
+                  </Link>
+                </li>
+    
+                <li>
+                  <Link className={styles.link} to="/dailylogs">
+                    Daily Logs
+                  </Link>
+                </li>
+    
+                {/* Si tu dashboard es la home cuando estás logueada, usa "/" */}
+                <li>
+                  <Link className={styles.link} to="/">
+                    Dashboard
+                  </Link>
+                </li>
+    
+                <li>
+                  <Link className={styles.link} to="/goals">
+                    Goals
+                  </Link>
+                </li>
+    
+                <li className={styles.pushRight}>
+                  <Link
+                    className={`${styles.btn} ${styles.btnSmall}`}
+                    to="/"
+                    onClick={handleSignOut}
+                  >
+                    Sign Out
+                  </Link>
+                </li>
+              </ul>
+            ) : (
+              <ul className={`${styles.menu} ${styles.menuRight}`}>
+                <li>
+                  <Link className={styles.btn} to="/sign-in">
+                    Sign In
+                  </Link>
+                </li>
+                <li>
+                  <Link className={styles.btn} to="/sign-up">
+                    Sign Up
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </div>
         </nav>
-    );
-};
+      );
+    };
+    
 export default NavBar;

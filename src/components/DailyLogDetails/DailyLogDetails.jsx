@@ -81,7 +81,7 @@ const DailyLogDetails = ({ handleDeleteDailyLog }) => {
         {ownerId === user?._id && (
           <div className={styles.actions}>
             <Link className={styles.editLink} to={`/dailylogs/${dailyLogId}/edit`}>
-              EDIT
+              Edit
             </Link>
 
             <button
@@ -89,7 +89,7 @@ const DailyLogDetails = ({ handleDeleteDailyLog }) => {
               onClick={() => handleDeleteDailyLog(dailyLogId)}
               type="button"
             >
-              DELETE
+              Delete
             </button>
           </div>
         )}

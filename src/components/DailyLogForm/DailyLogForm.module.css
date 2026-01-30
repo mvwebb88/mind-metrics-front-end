@@ -79,3 +79,29 @@
   font-weight: 600;
   cursor: pointer;
 }
+/* Placeholder text for inputs & textarea */
+.control::placeholder {
+  color: #9ca3af; /* soft gray */
+}
+
+/* Default date input text (before selection) */
+.control[type="date"] {
+  color: #9ca3af;
+}
+
+/* When date has a value */
+.control[type="date"]:focus,
+.control[type="date"]:valid {
+  color: #111827;
+}
+
+/* Default select text (Select option) */
+select.control {
+  color: #9ca3af;
+}
+
+/* When a real option is selected */
+select.control:focus,
+select.control:has(option:checked:not([value=""])) {
+  color: #111827;
+}
