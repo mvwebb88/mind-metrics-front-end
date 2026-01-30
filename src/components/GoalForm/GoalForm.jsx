@@ -205,9 +205,9 @@ const GoalForm = (props) => {
                     </div>
 
                     <div className={styles.actions}>
-                        <Link className={styles.action} type="submit">
+                        <button className={styles.action} type="submit">
                             Submit
-                        </Link>
+                        </button>
 
                         <Link className={styles.action} to="/goals">
                             Cancel

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Link } from "react-router";
 import { UserContext } from "../../contexts/UserContext";
+import styles from "./Home.module.css";
 
 const Home = ({ dailyLogs }) => {
     const { user } = useContext(UserContext);
@@ -33,23 +34,35 @@ const Home = ({ dailyLogs }) => {
     });
 
     return (
-        <main>
-            <h1>Welcome to MindMetrics, {user.username}!</h1>
-
+        <main className={styles.page}>
+          <section className={styles.card}>
+            <h1 className={styles.title}>Welcome to MindMetrics, {user?.username}!</h1>
+    
+            <p className={styles.subtitle}>
+              Quick check: log your day and keep building healthy habits.
+            </p>
+    
             {user && (
-                <>
-                    {todayLog ? (
-                        <Link to={`/dailylogs/${todayLog._id}`}>
-                            View Today's Daily Log ({formatMDY(todayLog.date)})
-                        </Link>
-                    ) : (
-                        <Link to="/dailylogs/new">Add Daily Log</Link>
-                    )}
-                </>
+              <div className={styles.actions}>
+                {todayLog ? (
+                  <Link className={styles.btn} to={`/dailylogs/${todayLog._id}`}>
+                    View Today&apos;s Daily Log ({formatMDY(todayLog.date)})
+                  </Link>
+                ) : (
+                  <Link className={styles.btn} to="/dailylogs/new">
+                    Add Daily Log
+                  </Link>
+                )}
+              </div>
             )}
+    
+            <p className={styles.helper}>
+              Tip: one daily log per day helps you spot patterns faster.
+            </p>
+          </section>
         </main>
-    );
-};
+      );
+    };
 
 export default Home;
 

@@ -56,9 +56,8 @@
     color: #111827;
   }
   
-  /* ✅ ESTE es el que empuja el menu entero a la derecha (desktop + mobile) */
   .menuRight {
-    margin-left: 60px;
+    justify-content: flex-end;
   }
   
   .menu {
@@ -114,13 +113,12 @@
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
     text-decoration: none;
   }
-  
-  /* ✅ separa Sign Out hacia la derecha */
+
   .pushRight {
     margin-left: auto;
   }
   
-  /* ✅ Sign out más pequeño */
+ 
   .btnSmall {
     padding: 8px 10px;
     font-size: 14px;
@@ -132,6 +130,7 @@
       max-width: 100%;
       padding-bottom: 2px;
     }
+  
   
     
     .menuRight {
