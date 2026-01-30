@@ -47,7 +47,7 @@ const NavBar = () => {
     
                 {/* Si tu dashboard es la home cuando estás logueada, usa "/" */}
                 <li>
-                  <Link className={styles.link} to="/">
+                  <Link className={styles.link} to="/dashboard">
                     Dashboard
                   </Link>
                 </li>
