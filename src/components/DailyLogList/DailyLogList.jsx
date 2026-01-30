@@ -55,25 +55,18 @@ const DailyLogList = ({ dailyLogs }) => {
 
   return (
     <main className={styles.page}>
-      <h1 className={styles.title}>Daily Logs</h1>
+      <header className={styles.headerRow}>
+        <h1 className={styles.title}>Daily Logs</h1>
 
-      {user && (
-        <div className={styles.actions}>
-          {!hasTodaysLog ? (
-            <Link className={styles.primaryLink} to="/dailylogs/new">
-              New Daily Log
-            </Link>
-          ) : (
-            <div className={styles.helperBox}>
-              <p>
-                You already have a log for today! If you missed logging any
-                previous days, you can do it here:
-              </p>
-              <Link className={styles.primaryLink} to="/dailylogs/new?date=past">
-                New Daily Log
-              </Link>
-            </div>
-          )}
+        <Link className={styles.primaryLink} to="/dailylogs/new">
+          + New Daily Log
+        </Link>
+      </header>
+
+      {/* Only show message if user has a log for today */}
+      {user && hasTodaysLog && (
+        <div className={styles.helperBox}>
+          <p>You already have a daily log for today!</p>
         </div>
       )}
 
